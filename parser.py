@@ -37,31 +37,42 @@ def parse_file( fname, points, transform, screen, color ):
         cmd = f.readline()
         if cmd == "quit":
             break
+        cmd = cmd[:cmd.find('\n')]
+        #print cmd
+        if cmd == "quit" or cmd == "":
+            break
         elif cmd == "line":
             e = f.readline().split()
-            add_edge(points, e[0], e[1], e[2], e[3], e[4], e[5])
+            add_edge(points, int(e[0]), int(e[1]), int(e[2]), int(e[3]), int(e[4]), int(e[5]))
+            #print_matrix(points)
         elif cmd == "ident":
             ident(transform)
         elif cmd == "scale":
             e = f.readline().split()
-            transform = make_scale(e[0], e[1], e[2])
+            matrix_mult(make_scale(int(e[0]), int(e[1]), int(e[2])),transform)
+            #print_matrix(transform)
         elif cmd == "move":
             e = f.readline().split()
-            transform = make_translate(e[0], e[1], e[2])
+            matrix_mult(make_translate(int(e[0]), int(e[1]), int(e[2])),transform)
         elif cmd == "rotate":
             e = f.readline().split()
             if e[0] == "x":
-                transform = make_rotX(e[1])
+                matrix_mult(make_rotX(int(e[1])), transform)
+                #print_matrix(transform)
             elif e[0] == "y":
-                transform = make_rotY(e[1])
+                matrix_mult(make_rotY(int(e[1])), transform)
             elif e[0] == "z":
-                transform = make_rotZ(e[1])
+                matrix_mult(make_rotZ(int(e[1])), transform)
+                #print_matrix(transform)
         elif cmd == "apply":
             matrix_mult(transform, points)
         elif cmd == "display":
+            #print "display"
+            clear_screen(screen)
             draw_lines(points, screen, color)
-            display(screen)
-        elif cmd == "save"
-            print screen
-    
+            display(screen)       
+        elif cmd == "save":
+            name = f.readline()
+            save_extension(screen, name[:name.find('\n')])
+    print "quit"
         
